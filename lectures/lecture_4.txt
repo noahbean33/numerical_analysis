@@ -1,0 +1,143 @@
+# Lecture Notes: Taylor Series & Polynomial Approximation
+
+## Numerical Analysis (Lecture 4)
+
+---
+
+## 1. Introduction to Numerical Analysis
+
+Numerical analysis moves beyond "toy examples" to demonstrate that our estimates actually converge to the quantities we seek. To prove this, we must define what it means for two functions to be "close" using **metrics**:
+
+* 
+**Euclidean Metric:** The standard distance formula on $\mathbb{R}^n$ based on the Pythagorean theorem.
+
+
+* 
+**Uniform Metric (Sup Norm):** Measures the closeness of continuous functions over a closed interval.
+
+
+* **The Envelope Concept:** Closeness is visualized as fitting an "envelope" or "window" of width $\epsilon$ around a function. If another function stays within this window, they are within distance $\epsilon$.
+
+
+
+
+
+---
+
+## 2. The Goal of Polynomial Approximation
+
+Given a function $f$ (continuous or differentiable) on an interval $[a, b]$ and an error tolerance $\epsilon > 0$, the goal is to find a polynomial $p(x)$ such that:
+
+
+$$\max_{x \in [a, b]} |f(x) - p(x)| < \epsilon$$
+
+This ensures the approximation stays within the desired "window" across the entire interval.
+
+---
+
+## 3. Deriving Taylor Polynomials
+
+Taylor polynomials are derived by expressing a function $f(x)$ through the Fundamental Theorem of Calculus and successive integration.
+
+### Iterative Process
+
+Assuming $f$ is $n$-times differentiable at point $a$:
+
+1. 
+**Zeroth Approximation ($T_0$):** $f(x) = f(a) + \int_a^x f'(t_1) dt_1$.
+
+
+2. 
+**First Approximation ($T_1$):** By expanding $f'(t_1)$ and integrating, we get $f(a) + f'(a)(x-a)$.
+
+
+3. 
+**Second Approximation ($T_2$):** Continuing the integration yields $f(a) + f'(a)(x-a) + \frac{f''(a)}{2}(x-a)^2$.
+
+
+
+### General Taylor Polynomial Formula ($T_n$)
+
+The $n^{th}$ order Taylor polynomial is defined as:
+
+
+$$T_n(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x-a)^n$$
+
+* 
+**Maclaurin Series:** A Taylor series centered at the origin ($a = 0$).
+
+
+
+---
+
+## 4. The Cauchy Formula for Iterated Integrals
+
+To simplify the complex multiple integrals used in the remainder of a Taylor series, we use the **Cauchy Formula for Iterated Integrals**.
+
+**Theorem:** If $f$ is continuous over $[a, b]$, then the $n$-fold iterated integral is equal to a single integral:
+
+
+$$f^{-n}(x) = \frac{1}{(n-1)!} \int_a^x (x-t)^{n-1} f(t) dt$$
+
+* 
+**Proof Method:** This is proven via induction and an exchange of variables in the double integral.
+
+
+
+---
+
+## 5. Error Bounds and Remainder Formula
+
+The difference between the function $f(x)$ and the $(n-1)^{th}$ Taylor polynomial is the **remainder**. Using the Cauchy formula, we can establish an error bound:
+
+### Lagrange Remainder Bound
+
+If $f$ is $n$-times continuously differentiable and $|f^{(n)}(x)| [cite_start]\leq M$ for all $x$ in the interval, then:
+
+
+$$|f(x) - T_{n-1}(x)| \leq \frac{M |x-a|^n}{n!}$$
+
+This bound is independent of $x$ when considering the entire interval, allowing us to find a **uniform bound**.
+
+---
+
+## 6. Examples of Convergence and Failure
+
+### The Success: $e^x$
+
+For the exponential function centered at $a$, the derivatives do not grow too fast. Since $n!$ outstrips $a^n$ as $n \to \infty$, the error goes to zero, proving the Taylor series converges to $e^x$.
+
+### The Failure: $f(x) = e^{-1/x^2}$
+
+This function serves as a critical "red flag" for Taylor series:
+
+* The function is infinitely differentiable ($C^\infty$).
+
+
+* At $x=0$, all derivatives $f^{(n)}(0) = 0$.
+
+
+* 
+**Result:** The Taylor series is the zero function ($T(x) = 0$), which does **not** converge to $f(x)$ anywhere except at the origin.
+
+
+
+---
+
+## 7. Practical Critique of Taylor Series
+
+While mathematically elegant, Taylor series have limitations in real-world numerical analysis:
+
+* **Data Constraints:** Constructing a Taylor polynomial requires successive derivatives. In practice, we often only have data samples, and numerical derivatives beyond the first or second are notoriously unstable.
+
+
+* 
+**Computational Cost:** Automatically generating high-order derivatives (e.g., using symbolic toolboxes in MATLAB) is computationally slow.
+
+
+* 
+**Local Nature:** Engineers often use the first few terms for quick local estimates (like differential equation stability), but the method generally performs poorly on a large scale.
+
+
+
+---
