@@ -1,0 +1,157 @@
+# Lecture Notes: Introduction to Numerical Analysis
+
+These lecture notes are based on the introductory session by Dr. Joel Rosenfeld, focusing on the history and fundamental goals of numerical analysis.
+
+---
+
+## I. Course Overview & Philosophy
+
+Numerical analysis is the study of algorithms that use numerical approximation for the problems of mathematical analysis.
+
+* 
+**Analytic vs. Numerical:** In calculus, solutions often have a **closed form** (e.g., using the chain rule or integration by parts). Numerical analysis provides a framework when these analytic methods fail or when functions are only known through discrete samples.
+
+
+* 
+**Core Goals:** * Developing algorithms for derivatives, integrals, and root-finding.
+
+
+* Demonstrating **convergence** (ensuring the algorithm actually reaches the correct value).
+
+
+* Analyzing **convergence rates** to balance speed and computational cost.
+
+
+
+
+* 
+**Course Structure:** The class consists of four units, each culminating in a project, and two non-cumulative exams.
+
+
+
+---
+
+## II. Historical Method: Archimedes and the Value of $\pi$
+
+Archimedes (c. 350 BC) developed the first routine for approximating $\pi$ by bounding a circle with polygons.
+
+### 1. Initial Bounds
+
+By using a circle of radius 1, the area is exactly $\pi$.
+
+* 
+**Upper Bound:** A circumscribed square has a side length of 2, resulting in an area of **4**.
+
+
+* 
+**Lower Bound:** An inscribed square creates 45-45-90 triangles with side lengths of $\sqrt{2}$, resulting in an area of **2**.
+
+
+* 
+**Initial Estimate:** $\pi$ is roughly 3.
+
+
+
+### 2. General Formula for Polygons
+
+As the number of sides doubles, the approximation improves. For the $n$-th iteration (where $n$ relates to doubling the triangles), the area of the circumscribed polygon $A_n$ is derived as:
+
+
+$$A_n = 2^n \tan\left(\frac{\pi}{2^n}\right)$$
+
+### 3. Proof of Convergence
+
+Using the Taylor series for $\tan(x) = x + \frac{x^3}{3} + \dots$:
+
+
+$$2^n \tan\left(\frac{\pi}{2^n}\right) = 2^n \left( \frac{\pi}{2^n} + \frac{(\frac{\pi}{2^n})^3}{3} + \dots \right)$$
+
+$$= \pi + \frac{\pi^3}{3(2^{2n})} + \dots$$
+
+As $n \to \infty$, the higher-order terms go to 0, and the area converges to $\pi$.
+
+---
+
+## III. Heron’s Method for Square Roots
+
+Heron of Alexandria (1st Century BC) developed an iterative method to find the square root of a number $S$.
+
+### 1. The Iterative Formula
+
+The method is equivalent to the modern **Newton's Method** for the polynomial $x^2 - S = 0$.
+
+
+$$x_{n+1} = \frac{1}{2} \left( \frac{S}{x_n} + x_n \right)$$
+
+### 2. Example: Finding $\sqrt{2}$
+
+* 
+**Initial Guess ($x_0$):** Let $x_0 = 2$.
+
+
+* 
+**Iteration 1 ($x_1$):** $\frac{1}{2} (2/2 + 2) = 1.5$.
+
+
+* 
+**Iteration 2 ($x_2$):** $\frac{1}{2} (2/1.5 + 1.5) \approx 1.4166...$.
+This reaches three significant digits of accuracy ($\sqrt{2} \approx 1.414$) in only two steps.
+
+
+
+---
+
+## IV. Logarithm Tables and Arithmetic Efficiency
+
+Before calculators, mathematicians like Henry Briggs (16th century) created tables to simplify multiplication into addition.
+
+### 1. The Power of Logs
+
+Since $\log(ab) = \log(a) + \log(b)$, products can be found via:
+
+1. Lookup $\log(a)$ and $\log(b)$ in a table.
+
+
+2. Add the values.
+
+
+3. Perform a "reverse lookup" to find the product.
+
+
+
+### 2. Table Construction (Briggs' Method)
+
+Briggs looked for powers of 2 close to powers of 10.
+
+* 
+$2^{10} = 1024 \approx 10^3$.
+
+
+* Therefore, $10 \log_{10}(2) \approx 3$, meaning $\log_{10}(2) \approx 0.3$.
+Briggs refined these tables to 52 decimal places using successive square roots (Heron's method) and interpolation.
+
+
+
+---
+
+## V. Fermat’s Method of Quadrature
+
+Pierre de Fermat (1607–1665) developed a way to integrate power functions ($x^n$) before the formal invention of calculus.
+
+### 1. Geometric Partitioning
+
+Instead of rectangles of equal width, Fermat used widths that shrink geometrically according to a ratio $r$ (where $0 < r < 1$). The interval $[0, a]$ is partitioned into points $a, ar, ar^2, ar^3, \dots$.
+
+### 2. Summation and Result
+
+By summing the areas of these infinite rectangles using the **geometric series formula**, Fermat determined that the area under $x^n$ from $0$ to $a$ is:
+
+
+$$\text{Area} = a^{n+1} \frac{1-r}{1-r^{n+1}}$$
+
+By factoring the denominator as $(1-r)(1 + r + r^2 + \dots + r^n)$, the $(1-r)$ terms cancel. As $r \to 1$, the denominator becomes $n+1$, yielding the modern power rule:
+
+
+$$\int_0^a x^n dx = \frac{a^{n+1}}{n+1}$$
+
+---
