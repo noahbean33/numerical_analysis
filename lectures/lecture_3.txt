@@ -1,0 +1,115 @@
+# Numerical Analysis: Lecture 3 — Asymptotic Notations
+
+This lecture focuses on gaining control over various quantities in numerical analysis—such as polynomial orders, sample point spacing, and operation counts—by using asymptotic notations like Big O, Little o, and Theta. These notations allow us to describe how errors shrink or how algorithm complexity grows without getting bogged down in messy, insignificant constants.
+
+---
+
+## 1. Big O Notation ($O$)
+
+### Definition
+
+We say a function $f(x)$ is **Big O** of $g(x)$ as $x$ approaches a limit $a$ (or infinity) if the absolute value of $f(x)$ is bounded by a constant multiple of the absolute value of $g(x)$:
+
+$$\text{As } x \to a, \quad |f(x)| \leq C|g(x)|$$
+
+* 
+**The Constant ($C$):** This value is independent of $x$. While often neglected or hard to compute, its existence is what allows us to say $g(x)$ "dominates" or scales with $f(x)$.
+
+
+* 
+**Intuition:** If $g(x)$ goes to zero, $f(x)$ must also go to zero at least as quickly.
+
+
+
+### Examples
+
+* 
+**Polynomials ($x \to \infty$):** $x^2 + 2x = O(x^2)$. This is proven via the triangle inequality; for $x > 1$, $|x^2 + 2x| [cite_start]\leq 3|x^2|$, meaning $C=3$.
+
+
+* 
+**Powers ($x \to 0$):** $x^2 = O(x)$ because in the neighborhood of zero, $x$ is always larger than $x^2$.
+
+
+
+### Application: Numerical Integration
+
+In quadrature (integration), we use Big O to describe how error decreases as the width of our intervals ($h$) or the number of chunks ($n$) changes:
+
+* 
+**Left-hand Rule:** $O(h)$ or $O(1/n)$.
+
+
+* 
+**Midpoint Rule:** $O(h^2)$.
+
+
+* 
+**Simpson’s Rule:** $O(h^4)$.
+
+
+
+---
+
+## 2. Little o Notation ($o$)
+
+### Definition
+
+We say $f(x) = o(g(x))$ as $x \to a$ if the ratio of the functions goes to zero:
+
+$$\lim_{x \to a} \frac{|f(x)|}{|g(x)|} = 0$$
+
+* 
+**Relationship:** Little o is a stronger condition than Big O; if $f(x) = o(g(x))$, then $f(x) = O(g(x))$.
+
+
+
+### Examples
+
+* 
+**Logarithms:** $\ln(x) = o(x^r)$ for any $r > 0$ as $x \to \infty$. This can be proved using L'Hôpital's Rule, showing the limit of the ratio is zero.
+
+
+* 
+**Trigonometry:** $(\frac{\sin x}{x} - 1) = o(x^2)$ as $x \to 0$. By expanding $\sin(x)$ into its Taylor series, we see the remaining terms are dominated by $x^2$.
+
+
+
+### The Derivative Connection
+
+Differentiability can be formally defined using little o notation. A function is differentiable at $a$ if there exists a value $f'(a)$ such that the linear approximation error is $o(h)$ as $h \to 0$.
+
+---
+
+## 3. Theta Notation ($\Theta$)
+
+### Definition
+
+Theta notation describes functions that behave "roughly the same" in the limit. We say $f(x) = \Theta(g(x))$ if:
+
+1. $f(x) = O(g(x))$
+2. $g(x) = O(f(x))$
+
+### Examples
+
+* 
+**Rational Functions:** $f(x) = \frac{x+2}{x-1}$ and $g(x) = \frac{5x}{2x-1}$ are $\Theta$ of each other as $x \to \infty$. Their ratio converges to a constant (two-fifths), meaning they scale together.
+
+
+* 
+**Hyperbolas:** $\sqrt{1+x^2} = \Theta(x)$ as $x \to \infty$ because the ratio converges to 1.
+
+
+
+---
+
+## Historical and Practical Context
+
+* 
+**Computer Science:** Donald Knuth’s *The Art of Computer Programming* (the "Bible" of CS) uses these notations extensively to quantify algorithm performance.
+
+
+* 
+**Asymptotic Analysis:** These tools are essential for discussing convergence and distances in any branch of mathematical analysis without getting lost in specific constants.
+
+
