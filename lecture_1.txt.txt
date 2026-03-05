@@ -1,6 +1,6 @@
 # Lecture Notes: Introduction to Numerical Analysis
 
-These lecture notes are based on the introductory session by Dr. Joel Rosenfeld, focusing on the history and fundamental goals of numerical analysis.
+These lecture notes focus on the history and fundamental goals of numerical analysis.
 
 ---
 

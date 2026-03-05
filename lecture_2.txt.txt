@@ -1,0 +1,138 @@
+# Numerical Analysis: Lecture 2 Notes
+
+## Metrics, Sequences, and Series
+
+To perform numerical analysis, we must first define what it means for an approximation to be "close" to a target value. These notes cover the foundational concepts of metrics, the behavior of sequences and series, and the formal definition of continuity—all of which are necessary to evaluate the convergence of numerical methods.
+
+---
+
+## 1. Metrics: Measuring "Closeness"
+
+A **metric** (denoted as $d$) is a function that defines the distance between two points in a set $X$. For a function to be a formal metric, it must satisfy four specific properties for all $x, y, z \in X$:
+
+### The Four Properties of a Metric
+
+1. 
+**Symmetry**: The distance from $x$ to $y$ is the same as the distance from $y$ to $x$ ($d(x, y) = d(y, x)$).
+
+
+2. 
+**Identity of Indiscernibles**: The distance from a point to itself is zero ($d(x, x) = 0$).
+
+
+3. 
+**Non-negativity**: Distance is always zero or positive ($d(x, y) \geq 0$).
+
+
+4. 
+**Triangle Inequality**: The direct distance is always less than or equal to the sum of distances through an intermediate point ($d(x, z) \leq d(x, y) + d(y, z)$).
+
+
+
+### Common Metrics in Numerical Analysis
+
+* 
+**Euclidean Distance**: Based on the Pythagorean theorem. In $\mathbb{R}^n$, it is defined as:
+
+
+
+$$d_e(x, y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}$$
+
+
+.
+
+
+* 
+**Taxicab Metric (L1 Distance)**: Measures distance as the sum of the absolute differences of coordinates (like driving on a city grid).
+
+
+* 
+**Uniform Metric (Supremum Norm)**: Used for comparing continuous functions on a closed interval $[a, b]$. It identifies the "maximum" distance between two functions:
+
+
+
+$$d(f, g) = \max_{t \in [a, b]} |f(t) - g(t)|$$
+
+
+.
+
+
+
+---
+
+## 2. Sequences and Convergence
+
+A **sequence** is a countable, ordered collection of points ($p_1, p_2, p_3, \dots$) within a set $X$.
+
+### Definition of Convergence
+
+A sequence $\{p_n\}$ converges to a limit $L$ if, for every $\epsilon > 0$, there exists an integer $N$ such that for all $n > N$, the distance $d(p_n, L) < \epsilon$. Essentially, the points must eventually "squeeze" into an arbitrarily small window around the limit.
+
+### Properties of Limits
+
+Assuming $p_n \to L$ and $q_n \to K$ in $\mathbb{R}$ with the Euclidean metric:
+
+* 
+**Linearity**: $c \cdot p_n \to c \cdot L$.
+
+
+* 
+**Sum/Difference**: $p_n \pm q_n \to L \pm K$.
+
+
+* 
+**Product**: $p_n \cdot q_n \to L \cdot K$. (Note: This relies on the lemma that every convergent sequence is bounded ).
+
+
+* 
+**Quotient**: $p_n / q_n \to L / K$ (provided $K \neq 0$).
+
+
+
+---
+
+## 3. Continuous Functions
+
+In the context of metrics, a function $f: X \to Y$ is **continuous** if it preserves the convergence of sequences. Specifically, if a sequence $p_n$ in $X$ converges to $L$, then the sequence $f(p_n)$ in $Y$ must converge to $f(L)$.
+
+> 
+> **Note**: Polynomials are continuous because they are built from linear combinations and products of the identity function ($f(x)=x$) and constants—both of which are inherently continuous.
+> 
+> 
+
+---
+
+## 4. Case Study: Convergence of Heron’s Formula
+
+Heron’s formula for finding the square root of $s$ ($x_{n+1} = \frac{1}{2}(x_n + \frac{s}{x_n})$) is a classic numerical method. Its convergence can be proved using two tools:
+
+1. 
+**AM-GM Inequality**: The arithmetic mean is always greater than or equal to the geometric mean ($\frac{a+b}{2} \geq \sqrt{ab}$). This proves that if we start above $\sqrt{s}$, every subsequent $x_n$ will remain above $\sqrt{s}$.
+
+
+2. 
+**Monotonic Convergence Theorem**: A sequence that is decreasing and bounded below must converge.
+
+
+
+Since Heron's sequence is monotonically decreasing and bounded below by $\sqrt{s}$, it must converge to a limit $L$. By applying the properties of continuous functions to the relation $L = \frac{1}{2}(L + \frac{s}{L})$, we find that $L^2 = s$, proving the method converges to $\sqrt{s}$.
+
+---
+
+## 5. Infinite Series
+
+A **series** is the limit of a sequence of partial sums.
+
+| Series Type | Definition | Convergence Criteria |
+| --- | --- | --- |
+| **Geometric** | $\sum x^n$ | Converges to $\frac{1}{1-x}$ if $ |
+| **Harmonic** | $\sum \frac{1}{n}$ | Always diverges (can be proved via the integral test).
+
+ |
+| **p-Series** | $\sum \frac{1}{n^p}$ | Converges if $p > 1$; diverges if $p \leq 1$.
+
+ |
+
+**The Basel Problem**: A famous result by Euler (1734) showed that the $p$-series with $p=2$ converges to exactly $\frac{\pi^2}{6}$.
+
+---
