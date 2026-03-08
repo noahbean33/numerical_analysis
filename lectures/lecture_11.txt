@@ -1,0 +1,124 @@
+# Lecture 11: Numerical Differentiation
+
+This lecture introduces numerical differentiation techniques, moving beyond analytical formulas (like the product or chain rule) to estimate derivatives for discrete data or complex functions. The core approach involves using **interpolating polynomials** to approximate a function and then taking the derivative of that polynomial to estimate the function's derivative.
+
+---
+
+## 1. Fundamental Theory
+
+Numerical differentiation relies on the limit definition of a derivative:
+
+
+$$\lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+
+
+
+In a numerical context, we use a small, non-zero $h$ to calculate the slope of a **secant line**, which approximates the **tangent line** at point $x$.
+
+### The Polynomial Approach
+
+To quantify error and improve accuracy, we represent the function $f(x)$ as:
+
+
+$$f(x) = P_n(x) + R_n(x)$$
+
+
+Where:
+
+* 
+$P_n(x)$ is the interpolating polynomial of degree $n$.
+
+
+* 
+$R_n(x)$ is the remainder (error) formula.
+
+
+
+By differentiating both sides, we get:
+
+
+$$f'(x) = P_n'(x) + R_n'(x)$$
+
+
+
+---
+
+## 2. Derivative Estimation Methods
+
+### A. Two-Point Forward Difference
+
+This method uses two points: $x_1$ and $x_2 = x_1 + h$.
+
+* 
+**Formula:** $f'(x_1) \approx \frac{f(x_1 + h) - f(x_1)}{h}$ 
+
+
+* 
+**Error Order:** $O(h)$ (First-order accurate).
+
+
+* 
+**Remainder:** $-\frac{h}{2} f''(c)$ for some $c$ in the interval.
+
+
+
+### B. Three-Point Symmetric (Central) Difference
+
+This method uses three points: $x_1 - h$, $x_1$, and $x_1 + h$. It leverages **symmetry** for higher accuracy without requiring extra evaluation points in the final formula.
+
+* 
+**Formula:** $f'(x_1) \approx \frac{f(x_1 + h) - f(x_1 - h)}{2h}$ 
+
+
+* 
+**Error Order:** $O(h^2)$ (Second-order accurate).
+
+
+* 
+**Remainder:** $-\frac{h^2}{6} f'''(c)$.
+
+
+
+### C. Three-Point One-Sided Difference
+
+Used when data is only available in one direction (e.g., at the start of a data set where $x < 0$ is unavailable). It uses $x_1, x_1+h,$ and $x_1+2h$.
+
+* 
+**Formula:** $f'(x_1) \approx \frac{f(x_1 + 2h) - f(x_1)}{2h}$ 
+
+
+* 
+**Error Order:** $O(h^2)$ (Second-order accurate).
+
+
+* 
+**Note:** While the order is $O(h^2)$, the error constant ($\frac{h^2}{3}$) is **twice as large** as the symmetric version.
+
+
+
+---
+
+## 3. Comparison of Estimators
+
+| Method | Points Used | Formula | Error Term | Accuracy |
+| --- | --- | --- | --- | --- |
+| **Forward Difference** | $x_1, x_1+h$ | $\frac{f(x_1+h)-f(x_1)}{h}$ | $\frac{h}{2} | f''(c) |
+| **Symmetric Difference** | $x_1-h, x_1+h$ | $\frac{f(x_1+h)-f(x_1-h)}{2h}$ | $\frac{h^2}{6} | f'''(c) |
+| **One-Sided (3-pt)** | $x_1, x_1+2h$ | $\frac{f(x_1+2h)-f(x_1)}{2h}$ | $\frac{h^2}{3} | f'''(c) |
+
+---
+
+## 4. Key Takeaways
+
+* 
+**Symmetry is Superior:** Symmetric points provide the best accuracy for the absolute error because the error constant is minimized.
+
+
+* 
+**Assumptions on $f$:** To increase the order of accuracy (e.g., from $O(h)$ to $O(h^2)$), you must assume the function is more "smooth" (e.g., $f'''$ must exist rather than just $f''$).
+
+
+* 
+**Application Constraints:** One-sided formulas are necessary if you lack data points on one side of the target value, despite their slightly lower accuracy compared to symmetric formulas.
+
+

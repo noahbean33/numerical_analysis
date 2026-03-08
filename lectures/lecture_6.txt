@@ -1,0 +1,125 @@
+# Lecture Notes: Taylor Series in MATLAB
+
+This lecture covers the implementation of a Taylor series approximation using MATLAB’s **Symbolic Math Toolbox** and numerical evaluation techniques.
+
+---
+
+## 1. Introduction to the Symbolic Toolbox
+
+The Symbolic Toolbox allows MATLAB to perform algebraic operations like differentiation, integration, and polynomial factoring automatically.
+
+* 
+**Pros:** It handles complex calculus tasks with minimal manual input.
+
+
+* 
+**Cons:** It is computationally slow; avoid using it for repetitive calculations in large loops.
+
+
+* 
+**Variable Definition:** Symbolic variables must be defined using the `syms` command.
+
+
+
+```matlab
+syms x; [cite_start]% Define a symbolic variable [cite: 4]
+f = sin(5*x); [cite_start]% Define the symbolic function [cite: 5]
+
+```
+
+---
+
+## 2. Generating Derivatives
+
+To build a Taylor series, you must calculate multiple derivatives. The `diff` function is used for symbolic differentiation.
+
+* 
+**Manual Check:** `diff(f)` returns $5\cos(5x)$.
+
+
+* 
+**Automated Collection:** You can use a `for` loop to generate a vector of derivatives up to a specific degree ($n$).
+
+
+* 
+**Programming Note:** While appending to a vector in a loop is generally slow in MATLAB, it works for small demonstrations.
+
+
+
+---
+
+## 3. Numerical Conversion and Evaluation
+
+Because symbolic evaluation is slow, it is more efficient to convert a symbolic expression into a standard MATLAB function handle.
+
+* 
+**Function Conversion:** Use `matlabFunction(f)` to create a handle for numerical input.
+
+
+* 
+**Substitution:** Alternatively, `subs(f, x, value)` can replace a symbolic variable with a number, though it is less efficient for plotting.
+
+
+
+---
+
+## 4. Constructing the Taylor Series
+
+The general form of the Taylor series centered at $a$ is:
+
+
+$$P_n(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!} (x-a)^k$$
+
+To implement this in MATLAB, the speaker breaks it down into three components:
+
+### A. The Factorial Vector
+
+Created using the `factorial` function to handle the denominator of each term.
+
+* 
+**Calculation:** `1 ./ factorial(0:n)` generates a vector of $1/k!$.
+
+
+
+### B. The Power Vector
+
+Created to handle the $(x-a)^k$ portion of the series.
+
+* 
+**Centering:** It is crucial to subtract the center point $a$ from the input variable (e.g., $(t-2)^k$) to ensure local accuracy.
+
+
+
+### C. Matrix Multiplication
+
+MATLAB’s ability to perform inner products and matrix multiplication allows for a clean implementation.
+
+* The derivative values, factorials, and powers are multiplied entry-wise and summed to produce the final approximation.
+
+
+
+---
+
+## 5. Visualization and Convergence
+
+The accuracy of the approximation depends on the degree of the polynomial.
+
+| Degree ($n$) | Observation |
+| --- | --- |
+| **Low (e.g., 3)** | Only accurate very close to the center point $a$.
+
+ |
+| **Medium (e.g., 10)** | Starts to resemble the curve but diverges quickly at the edges.
+
+ |
+| **High (e.g., 40)** | Almost perfectly mimics the original function (e.g., $\sin$) over the plotted range.
+
+ |
+
+> 
+> **Key Takeaway:** Local behavior is easy to capture, but broader convergence requires a higher-degree polynomial.
+> 
+> 
+
+---
+

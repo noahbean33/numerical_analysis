@@ -1,0 +1,132 @@
+# **Lecture 10: Kernel & RBF Interpolation**
+
+---
+
+## **Overview & Motivation**
+
+While previous lectures focused on **polynomial approximation** (Taylor series, Lagrange, Newton, and Vandermonde methods), this lecture introduces **kernel functions** as a modern alternative for function approximation.
+
+### **Why Kernels?**
+
+* 
+**Higher Dimensions:** Unlike splines, which are difficult to translate to higher dimensions, the algorithm for kernel methods remains unchanged whether you are working in 1D or 20D.
+
+
+* 
+**Modern Applications:** Kernels are a pivotal tool in **Machine Learning** (specifically Support Vector Machines) and Data Science.
+
+
+* 
+**Versatility:** They are used to solve initial value problems, partial differential equations (PDEs), and operator theory.
+
+
+
+---
+
+## **Formal Definition of a Kernel**
+
+Let $K: X \times X \to \mathbb{R}$ be a function of two variables on a set $X$. $K$ is considered a **kernel function** if it satisfies either of the following equivalent conditions:
+
+### **1. Positive Definiteness (The Gram Matrix)**
+
+Given any collection of distinct points $\{x_1, \dots, x_m\} \in X$, the resulting **Gram matrix** $G$ must be positive definite:
+
+
+$$G = \begin{bmatrix} K(x_1, x_1) & \cdots & K(x_1, x_m) \\ \vdots & \ddots & \vdots \\ K(x_m, x_1) & \cdots & K(x_m, x_m) \end{bmatrix}$$
+
+A positive definite matrix implies that for any non-zero vector $v$, $v^T G v > 0$, ensuring the matrix is **invertible**.
+
+### **2. Feature Maps**
+
+A kernel can be represented as an inner product of **feature maps**:
+
+
+$$K(x, y) = \sum_{m=1}^{\infty} \psi_m(x) \psi_m(y)$$
+
+where $\{\psi_m\}$ is a collection of functions such that $\sum |\psi_m(x)|^2 < \infty$.
+
+---
+
+## **Key Kernel Examples**
+
+### **Exponential Dot Product Kernel**
+
+Also known as the **Fock space kernel**, it is defined as:
+
+
+$$K(x, y) = e^{x y}$$
+
+This is proven to be a kernel by expanding it into its Taylor series, which reveals the underlying feature functions $\psi_n(x) = \frac{x^n}{\sqrt{n!}}$.
+
+### **Gaussian Radial Basis Function (RBF) Kernel**
+
+This is one of the most common kernels used in applied mathematics:
+
+
+$$K(x, y) = e^{-\frac{\|x - y\|^2}{\mu}}$$
+
+* 
+**Radial Nature:** The function is "centered" at a point $y$ and decays as $x$ moves further away.
+
+
+* 
+**Parameter $\mu$:** A scaling parameter used to adjust the kernel based on the specific data.
+
+
+
+---
+
+## **The Interpolation Goal**
+
+Given a function $f$ and a collection of sample points (support points) $\{(x_i, y_i)\}_{i=1}^M$, we seek an interpolant $s_m(x)$ of the form:
+
+
+$$s_m(x) = \sum_{i=1}^{M} w_i K(x, x_i)$$
+
+The goal is to find the weights $w_i$ such that the interpolant matches the data exactly: $s_m(x_i) = y_i$.
+
+---
+
+## **The Matrix Formulation**
+
+To find the weights, we set up a system of linear equations:
+
+
+$$\begin{bmatrix} K(x_1, x_1) & \cdots & K(x_1, x_m) \\ \vdots & \ddots & \vdots \\ K(x_m, x_1) & \cdots & K(x_m, x_m) \end{bmatrix} \begin{bmatrix} w_1 \\ \vdots \\ w_m \end{bmatrix} = \begin{bmatrix} y_1 \\ \vdots \\ y_m \end{bmatrix}$$
+
+This can be written compactly as:
+
+
+$$G \mathbf{w} = \mathbf{y}$$
+
+Because the Gram matrix $G$ is positive definite (provided the points $x_i$ are distinct), it is guaranteed to be **invertible**. Therefore, the weight vector can be calculated as:
+
+
+$$\mathbf{w} = G^{-1} \mathbf{y}$$
+
+---
+
+## **Summary Table**
+
+| Feature | Polynomial Interpolation | Kernel/RBF Interpolation |
+| --- | --- | --- |
+| **Basis Functions** | <br>$1, x, x^2, \dots$ 
+
+ | Kernels $K(x, x_i)$ 
+
+ |
+| **Matrix Type** | Vandermonde 
+
+ | Gram (Positive Definite) 
+
+ |
+| **Scaling** | Hard in high dimensions 
+
+ | Seamless in high dimensions 
+
+ |
+| **Invertibility** | Proven via Determinant 
+
+ | Proven via Eigenvalues/Positivity 
+
+ |

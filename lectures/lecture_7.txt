@@ -1,0 +1,127 @@
+## **Lecture Notes: Introduction to MATLAB & Heron’s Method**
+
+---
+
+### **1. Introduction**
+
+This lecture provides a fundamental introduction to **MATLAB** programming by implementing **Heron’s Method** (also known as the Babylonian method) for computing square roots. The lesson covers variable declaration, loop structures, and basic data visualization.
+
+### **2. Heron’s Method: The Algorithm**
+
+Heron’s method is an iterative algorithm used to find the square root of a number $s$.
+
+* 
+**Initial Guess:** Start with an arbitrary initial value, often $x_0 = s$.
+
+
+* 
+**Iterative Step:** The next approximation is found by taking the average of the current guess ($x_n$) and $s/x_n$.
+
+
+* 
+**Formula:** 
+$$x_{n+1} = \frac{1}{2} \left( x_n + \frac{s}{x_n} \right)$$
+
+
+.
+
+
+
+---
+
+### **3. MATLAB Implementation (Basic Script)**
+
+In the first version of the code, the value of the variable `x` is updated repeatedly within a loop.
+
+* **Variables:**
+* 
+`s = 2;` (The number we are finding the square root of).
+
+
+* 
+`x = s;` (The initial guess).
+
+
+
+
+* **The For Loop:**
+* Runs for a set number of iterations (e.g., 20).
+
+
+* 
+`x = 0.5 * (x + s/x);` updates the value of $x$ in each cycle.
+
+
+
+
+* 
+**Syntax Tip:** Use a **semicolon (`;`)** at the end of lines to suppress output in the command window, which prevents the screen from being flooded during loops.
+
+
+
+---
+
+### **4. Advanced Implementation: Using Vectors**
+
+To visualize how the value converges over time, we store every iteration in a **vector** rather than overwriting a single variable.
+
+* **Pre-allocating Memory:** Use the `zeros` function to create a row vector of a specific length to store results:
+* 
+`x = zeros(1, 20);`.
+
+
+
+
+* 
+**Indexing:** In MATLAB, vector indices start at **1**, not 0.
+
+
+* 
+**Iterative Storage:** * `x(1) = s;` (Stores the initial guess in the first position).
+
+
+* Inside the loop, use `x(i) = 0.5 * (x(i-1) + s/x(i-1));` to calculate the current value based on the previous one.
+
+
+
+
+
+---
+
+### **5. Data Visualization & Output**
+
+MATLAB offers several ways to view and analyze the results:
+
+* **Plotting:**
+* 
+`plot(1:20, x)`: Creates a line graph showing the sequence leveling out as it converges to the square root.
+
+
+* 
+`plot(1:20, x, 'o')`: Creates a scatter plot with circles, which is more appropriate for a discrete sequence.
+
+
+
+
+* **Command Window Display:**
+* 
+`format long`: Changes the display to show more decimal places.
+
+
+* 
+`x'`: Using an apostrophe transposes a row vector into a column vector for easier reading.
+
+
+
+
+
+---
+
+### **6. Convergence Observations**
+
+* With approximately **20 iterations**, the value of $x$ becomes indistinguishable from the actual square root ($\sqrt{2} \approx 1.4142$) within MATLAB's standard precision.
+
+
+* The algorithm is highly efficient, often reaching significant accuracy within 4 to 5 iterations.
+
+

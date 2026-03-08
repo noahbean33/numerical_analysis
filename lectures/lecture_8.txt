@@ -1,0 +1,145 @@
+These notes summarize the lecture on **Newton’s Divided Differences**, an efficient method for polynomial interpolation in numerical analysis.
+
+---
+
+## ## Overview of Polynomial Interpolation
+
+Interpolation involves finding a polynomial of degree $n$ or less that passes through $n+1$ given points $(x_i, y_i)$.
+
+* 
+**Uniqueness:** For a given set of $n+1$ points, the interpolating polynomial is unique. This can be proven via the **Vandermonde matrix**, which is invertible, ensuring exactly one solution for the coefficients.
+
+
+* **Basis Options:** While the polynomial is unique, it can be represented using different bases:
+* 
+**Monomial Basis:** $1, x, x^2, \dots, x^n$.
+
+
+* 
+**Lagrange Basis:** Useful for theoretical work; each basis function is 1 at one specific point and 0 at all others.
+
+
+* 
+**Newton Basis:** The focus of this lecture, utilizing divided differences.
+
+
+
+
+
+### ### Advantages of Newton's Method
+
+* 
+**Efficiency in Updates:** If an interpolation point is changed or added, you only need to calculate the new coefficients; the previous ones remain unchanged. In contrast, changing one point in Lagrange interpolation requires recalculating every basis function.
+
+
+* 
+**Calculus Applications:** This method is highly beneficial for **numerical differentiation** and **numerical integration**.
+
+
+
+---
+
+## ## The Newton Form of the Polynomial
+
+The interpolating polynomial $P_n(x)$ is constructed as:
+
+
+$$P_n(x) = a_0 n_0(x) + a_1 n_1(x) + \dots + a_n n_n(x)$$
+
+
+
+The **Newton basis functions** are defined as:
+
+* 
+$n_0(x) = 1$ 
+
+
+* 
+$n_1(x) = (x - x_1)$ 
+
+
+* 
+$n_2(x) = (x - x_1)(x - x_2)$ 
+
+
+* 
+$n_k(x) = \prod_{i=1}^{k} (x - x_i)$ 
+
+
+
+### ### Defining Divided Differences
+
+The coefficients $a_k$ are found using divided differences, denoted recursively:
+
+
+$$[y_1, \dots, y_k] = \frac{[y_2, \dots, y_k] - [y_1, \dots, y_{k-1}]}{x_k - x_1}$$
+
+
+
+> 
+> **Note:** $a_0 = y_1$, $a_1 = [y_1, y_2]$, $a_2 = [y_1, y_2, y_3]$, and so on.
+> 
+> 
+
+---
+
+## ## Constructing the Divided Difference Table
+
+To compute the coefficients efficiently, we arrange the data in a table where each entry is derived from the terms to its left.
+
+| $x$ | $y$ (0th Diff) | 1st Divided Diff | 2nd Divided Diff | 3rd Divided Diff |
+| --- | --- | --- | --- | --- |
+| $x_1$ | $y_1$ (**$a_0$**) |  |  |  |
+| $x_2$ | $y_2$ | $[y_1, y_2]$ (**$a_1$**) |  |  |
+| $x_3$ | $y_3$ | $[y_2, y_3]$ | $[y_1, y_2, y_3]$ (**$a_2$**) |  |
+| $x_4$ | $y_4$ | $[y_3, y_4]$ | $[y_2, y_3, y_4]$ | $[y_1, y_2, y_3, y_4]$ (**$a_3$**) |
+
+**The Pattern:** To find an entry, take the difference between the term immediately to the left and the term above that. Divide by the difference between the $x$-value corresponding to the current row and the $x$-value found by following the upward diagonal to the top.
+
+---
+
+## ## Worked Example
+
+**Points:** $(1, 0), (2, 3), (3, 2), (5, 20)$ 
+
+### ### 1. Build the Table
+
+| $x$ | $y$ | 1st Diff | 2nd Diff | 3rd Diff |
+| --- | --- | --- | --- | --- |
+| **1** | **0** ($a_0$) |  |  |  |
+| **2** | 3 | $\frac{3-0}{2-1} =$ **3** ($a_1$) |  |  |
+| **3** | 2 | $\frac{2-3}{3-2} = -1$ | $\frac{-1-3}{3-1} =$ **$-2$** ($a_2$) |  |
+| **5** | 20 | $\frac{20-2}{5-3} = 9$ | $\frac{9-(-1)}{5-2} = \frac{10}{3}$ | $\frac{10/3 - (-2)}{5-1} =$ **$4/3$** ($a_3$) |
+| 
+
+ |  |  |  |  |
+
+### ### 2. Form the Polynomial
+
+Using the coefficients from the top diagonal ($a_0=0, a_1=3, a_2=-2, a_3=4/3$):
+
+
+$$P_3(x) = 0(1) + 3(x-1) - 2(x-1)(x-2) + \frac{4}{3}(x-1)(x-2)(x-3)$$
+
+
+
+### ### 3. Verification
+
+* 
+$P_3(1) = 0$ 
+
+
+* 
+$P_3(2) = 3(1) = 3$ 
+
+
+* 
+$P_3(3) = 3(2) - 2(2)(1) = 6 - 4 = 2$ 
+
+
+* 
+$P_3(5) = 3(4) - 2(4)(3) + \frac{4}{3}(4)(3)(2) = 12 - 24 + 32 = 20$ 
+
+
+
+---

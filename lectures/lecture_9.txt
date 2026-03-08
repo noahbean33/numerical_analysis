@@ -1,0 +1,147 @@
+# Lecture Notes: Big Oh Reprise (Lecture 9)
+
+These notes cover the derivation of **Big O estimates** for various polynomial approximation schemes, focusing on how convergence rates depend on the degree of the polynomial ($n$) or the spacing of sample points ($h$).
+
+---
+
+## Core Objective
+
+The goal is to determine the convergence rate by bounding the **uniform distance** (maximum pointwise difference) between a function $f(x)$ and its approximation $g(x)$ over an interval $[a, b]$:
+
+
+$$\max_{x \in [a, b]} |f(x) - g(x)| = O(\text{rate})$$
+
+This allows us to control the error by increasing the polynomial degree or decreasing the sampling interval.
+
+---
+
+## 1. Taylor Series Convergence
+
+Taylor series approximations rely on the **Lagrange form of the remainder** to estimate error.
+
+### The Remainder Term
+
+For a Taylor polynomial of degree $N$ centered at $a$, the error is:
+
+
+$$|f(x) - P_N(x)| = \left| \frac{f^{(N+1)}(c)}{(N+1)!} (x-a)^{N+1} \right|$$
+
+where $c$ is some value between $x$ and $a$.
+
+### Convergence Rate
+
+* **Assumptions:** We assume the derivatives of $f$ are bounded, such as $|f^{(N+1)}(c)| [cite_start]\leq C \cdot M^N$. This applies to functions like $e^{kx}$, $\sin(kx)$, and $\cos(kx)$.
+
+
+* 
+**Result:** By substituting the bounds into the remainder formula, we find that the error is governed by an exponential divided by a factorial:
+
+
+
+$$\max_{x \in [a, b]} |f(x) - P_N(x)| = O\left( \frac{\tilde{M}^{N+1}}{(N+1)!} \right)$$
+
+
+* 
+**Conclusion:** Since factorials grow faster than exponentials, this error always goes to zero as $N \to \infty$.
+
+
+
+---
+
+## 2. Interpolating Polynomials
+
+Interpolation involves finding a polynomial of degree $n$ that passes through $n+1$ specific points.
+
+### The Remainder Term
+
+The error for an interpolating polynomial $P_n(x)$ is:
+
+
+$$|f(x) - P_n(x)| = \left| \frac{f^{(n+1)}(c)}{(n+1)!} \prod_{i=1}^{n+1} (x - x_i) \right|$$
+
+### Bounding the Product Term
+
+To find a Big O estimate for equally spaced points (where spacing is $h$), we must bound the product $\prod |x - x_i|$:
+
+1. 
+**Logarithmic Transformation:** We take the logarithm of the product to turn it into a sum: $\sum \log|x - x_i|$.
+
+
+2. 
+**Integral Approximation:** For large $n$, this sum is approximated by an integral.
+
+
+3. 
+**Exponential Bound:** Taking the exponential of the resulting integral bound yields an estimate growing like $e^n$.
+
+
+
+### Convergence Rate
+
+Substituting this back into the remainder formula:
+
+
+$$\max |f(x) - P_n(x)| = O\left( \frac{e^{n \cdot \text{constant}}}{(n+1)!} \right)$$
+
+Similar to Taylor series, the factorial in the denominator ensures the error converges to zero.
+
+---
+
+## 3. Bernstein Polynomials
+
+Bernstein polynomials provide a way to approximate continuous functions on the interval $[0, 1]$.
+
+### The Formula
+
+The $n$-th Bernstein polynomial for $f$ is:
+
+
+$$B_n(f; x) = \sum_{k=0}^n \binom{n}{k} f\left(\frac{k}{n}\right) x^k (1-x)^{n-k}$$
+
+### Deriving the Rate
+
+To find the Big O estimate, we use a Taylor expansion of $f$ of order one and assume $f$ is **twice continuously differentiable** ($f \in C^2$).
+
+* **Key Identities:**
+* 
+$B_n(1; x) = 1$ 
+
+
+* 
+$B_n(x; x) = x$ 
+
+
+* The term involving the second derivative simplifies to $\frac{x(1-x)}{n}$.
+
+
+
+
+* 
+**Result:** The error is bounded by a constant times $\frac{1}{n}$:
+
+
+
+$$\max_{x \in [0, 1]} |B_n(f; x) - f(x)| = O\left( \frac{1}{n} \right)$$
+
+
+
+> 
+> **Note:** If the function is only continuous (not $C^2$), the best convergence rate is significantly slower at $O(1/\sqrt{n})$.
+> 
+> 
+
+---
+
+## Summary of Convergence Rates
+
+| Method | Convergence Rate (Big O) | Primary Requirement |
+| --- | --- | --- |
+| **Taylor Series** | $O\left( \frac{M^{n+1}}{(n+1)!} \right)$ | High-order smoothness 
+
+ |
+| **Interpolation** | $O\left( \frac{e^{cn}}{(n+1)!} \right)$ | Equally spaced points 
+
+ |
+| **Bernstein** | $O\left( \frac{1}{n} \right)$ | Twice continuously differentiable ($C^2$) 
+
+ |
